@@ -7,7 +7,7 @@ import traceback
 
 from pathlib import Path
 
-from . import MigrationConfig, ZoteroItems
+from zotero import MigrationConfig, ZoteroItems
 
 journal = Path('~/zotero_a_inventaire.log').expanduser()
 chemin = Path('~/zotero_a_inventaire.cfg').expanduser()
