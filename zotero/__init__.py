@@ -5,7 +5,14 @@ import pathlib
 
 from sqlalchemy import MetaData
 
+from polygphys.config import FichierConfig
 from polygphys.outils.base_de_donnees import BaseDeDonnées, BaseTableau
+
+
+class MigrationConfig(FichierConfig):
+
+    def default(self):
+        return pathlib.Path(__file__).parent / 'default.cfg'
 
 
 class ZoteroItems:
@@ -69,12 +76,3 @@ class ZoteroItems:
         self.sortie.màj(items)
 
         return items
-
-
-if __name__ == '__main__':
-    mdp = open('mdp.txt').read().strip()
-    bd = ZoteroItems(
-        'sqlite:////Volumes/GeniePhysique/Techniciens/Emile_Jetzer/Zotero/zotero.sqlite',
-        f'mysql+pymysql://emilejetzer:{mdp}@132.207.44.77:3306/inventaire2022')
-
-    print(bd.charger())
