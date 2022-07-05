@@ -12,7 +12,7 @@ from polygphys.outils.base_de_donnees import BaseDeDonnées, BaseTableau
 class MigrationConfig(FichierConfig):
 
     def default(self):
-        return pathlib.Path(__file__).parent / 'default.cfg'
+        return (pathlib.Path(__file__).parent / 'default.cfg').open().read()
 
 
 class ZoteroItems:
