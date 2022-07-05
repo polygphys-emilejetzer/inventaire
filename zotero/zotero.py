@@ -5,7 +5,7 @@ import pathlib
 
 from sqlalchemy import MetaData
 
-from polygphys.config import FichierConfig
+from polygphys.outils.config import FichierConfig
 from polygphys.outils.base_de_donnees import BaseDeDonnées, BaseTableau
 
 
