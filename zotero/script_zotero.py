@@ -11,7 +11,7 @@ from pathlib import Path
 import sqlite3
 import sqlalchemy
 
-from polygphys.admin.inventaire.zotero import MigrationConfig, ZoteroItems
+from polygphys.admin.inventaire.zotero.zotero import MigrationConfig, ZoteroItems
 
 def main():
         import logging
