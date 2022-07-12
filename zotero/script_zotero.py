@@ -5,7 +5,11 @@ import schedule
 import time
 import traceback
 
+from datetime import datetime
 from pathlib import Path
+
+import sqlite3
+import sqlalchemy
 
 from zotero import MigrationConfig, ZoteroItems
 
@@ -20,18 +24,19 @@ mdp = config.get('inventaire2022', 'mdp')
 
 inventaire2022 = inventaire2022.format(nom=nom, mdp=mdp)
 
-bd = ZoteroItems(zotero, inventaire2022)
-
 
 def enveloppe():
+    print(f'Mise à jour {datetime.now()}...')
     try:
+        bd = ZoteroItems(zotero, inventaire2022)
         bd.charger()
-    except Exception:
+    except (Exception, sqlite3.OperationalError, sqlalchemy.exc.OperationalError):
         with journal.open() as f:
             traceback.print_exc(file=f)
 
 
 schedule.every(10).minutes.do(enveloppe)
+print('On commence...')
 while True:
     schedule.run_pending()
     time.sleep(10)
