@@ -14,14 +14,15 @@ from sqlalchemy import MetaData
 
 # Bibliothèques maison
 from polygphys.outils.config import FichierConfig
-from polygphys.outils.base_de_données import BaseDeDonnées
-from polygphys.outils.interface_graphique.tkinter import Tableau
+from polygphys.outils.base_de_donnees import BaseDeDonnées
+from polygphys.outils.interface_graphique.tableau import Tableau
 from polygphys.outils.interface_graphique.tkinter.onglets import Onglets, OngletBaseDeDonnées
 
 # Modules locaux
 import modeles
 
 # Définitions de classes
+
 
 class InventaireConfig(FichierConfig):
     """Fichier de configuration de programme d'inventaire."""
@@ -125,5 +126,3 @@ onglets = Onglets(racine, config, metadata, dialect='mysql')
 # Aller!
 onglets.grid(sticky='nsew')
 racine.mainloop()
-
-

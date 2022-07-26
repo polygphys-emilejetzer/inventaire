@@ -37,30 +37,54 @@ equipement = table
 compagnies = BaseTableau(db, 'compagnies', 'idcompagnies')
 references = BaseTableau(db, 'references', 'itemID')
 
-cond_fournisseurs = equipement.db.table(
-    'equipement').c.fournisseur == compagnies.db.table('compagnies').c.idcompagnies
-cond_fabricants = equipement.db.table(
-    'equipement').c.fabricant == compagnies.db.table('compagnies').c.idcompagnies
-fournisseurs = compagnies.select(where=[cond_fournisseurs])
-fabricants = compagnies.select(where=[cond_fabricants])
 
-cond_references = equipement.db.table(
-    'equipement').c.reference == references.db.table('references').c.itemID
-references = references.select(where=[cond_references])
+# Colonne pour les fournisseurs
+table_de_valeurs = compagnies
+colonne_de_valeurs = 'nom'
 
-df = equipement.loc(['nom', 'fournisseur', 'no_fournisseur', 'reference', 'quantite'])[:, :]
-df.loc[:, 'idequipement'] = df.index
+table_de_références = equipement
+colonne_de_références = 'fournisseur'
 
-cond = df.loc[~df.fournisseur.isna(), 'fournisseur']
-fournisseurs = fournisseurs.loc[cond, ['nom']].rename(columns={'nom': 'nom_fournisseur'})
 
-cond = df.loc[~df.reference.isna(), 'reference']
-references = references.loc[cond, ['lien']]
+def index_à_valeurs(tableau_val, col_val, tableau_réf, col_réf):
+    vals = tableau_val.loc([col_val])[:, col_val]
+    réfs = tableau_réf.loc([col_réf])[:, col_réf]
 
-df = df.set_index('fournisseur')\
-       .join(fournisseurs)\
-       .set_index('reference')\
-       .join(references)\
-       .set_index('idequipement')
+    vals = {idx: (vals.loc[ref] if (not np.isnan(ref) and
+                                    ref is not None)
+                  else None)
+            for idx, ref in réfs.items()}
+    vals = pd.Series(vals).sort_index()
 
-df.to_excel('res.xlsx')
+    return vals
+
+
+print(index_à_valeurs(table_de_valeurs, colonne_de_valeurs,
+      table_de_références, colonne_de_références))
+
+# for idx, (ref,) in df.iterrows():
+#     if not np.isnan(ref) and ref is not None:
+#         df.loc[idx, colonne_de_valeurs] = valeurs.loc[ref]
+
+# df = df.sort_index()\
+# .loc[:, colonne_de_valeurs]
+
+# print(df)
+
+# # Colonne pour les références
+# cond_references = equipement.table.c.reference == references.table.c.itemID
+# references = references.select(where=[cond_references])
+
+# df = equipement.loc(['reference'])[:, :]
+# df.loc[:, 'idequipement'] = df.index
+
+# cond = df.loc[~df.reference.isna(), 'reference']
+# references = references.loc[cond, ['lien']]
+
+# df = df.set_index('reference')\
+#        .join(references)\
+#        .set_index('idequipement')\
+#        .loc[:, 'lien']
+
+# # df.to_excel('res.xlsx')
+# print(df)
